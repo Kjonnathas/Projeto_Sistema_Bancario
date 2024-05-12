@@ -1,13 +1,12 @@
-from sqlalchemy import create_engine, MetaData, Table, select, Column, Integer, String, Date, DateTime, Float, Numeric, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Date, DateTime, Float, Numeric, ForeignKey
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, date
 
 
 Base = declarative_base()
 
-class DadosCliente(Base):
+class Tb_cliente(Base):
 
         __tablename__ = 'd_clientes'
 
@@ -23,7 +22,7 @@ class DadosCliente(Base):
         data_atualizacao = Column(DateTime)
 
 
-class DadosConta(Base):
+class Tb_conta(Base):
 
         __tablename__ = 'd_dados_conta'
 
@@ -35,7 +34,7 @@ class DadosConta(Base):
         data_atualizacao = Column(DateTime)
 
 
-class DadosEndereco(Base):
+class Tb_endereco(Base):
 
         __tablename__ = 'd_enderecos'
 
@@ -50,7 +49,7 @@ class DadosEndereco(Base):
         data_atualizacao = Column(DateTime)
 
 
-class DadosTransacao(Base):
+class Tb_transacao(Base):
 
         __tablename__ = 'f_transacoes'
 
@@ -62,7 +61,7 @@ class DadosTransacao(Base):
         data_atualizacao = Column(DateTime)
 
 
-def _realizar_conexao_db():
+def conectar_db():
 
     username = 'postgres'
     password = 'postgre527961'
@@ -70,57 +69,51 @@ def _realizar_conexao_db():
     database_name = 'db_banco_postgres'
 
     connection = f'postgresql://{username}:{password}@{hostname}/{database_name}'
-
     global engine
-
     engine = create_engine(connection)
 
+def localizar_cliente(cpf):
 
-def localizar_cliente_db(cpf):
-
-    _realizar_conexao_db()
+    conectar_db()
 
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    filtrar_cliente = session.query(DadosCliente).filter_by(cpf=cpf).first()
+    cliente = session.query(Tb_cliente).filter_by(cpf=cpf).first()
 
     session.close()
 
     return {
-                "ID_Cliente": filtrar_cliente.id_cliente,
-                "Nome_cliente": filtrar_cliente.nome_cliente,
-                "Gênero": filtrar_cliente.genero,
-                "CPF": filtrar_cliente.cpf, 
-                "RG": filtrar_cliente.rg,
-                "Data_nascimento": filtrar_cliente.data_nascimento,
-                "Email": filtrar_cliente.email,
-                "Celular": filtrar_cliente.celular,
-                "Renda": filtrar_cliente.renda
+                "ID_Cliente": cliente.id_cliente,
+                "Nome_cliente": cliente.nome_cliente,
+                "Gênero": cliente.genero,
+                "CPF": cliente.cpf, 
+                "RG": cliente.rg,
+                "Data_nascimento": cliente.data_nascimento,
+                "Email": cliente.email,
+                "Celular": cliente.celular,
+                "Renda": cliente.renda
             } \
-    if filtrar_cliente else "Cliente não encontrado"
+    if cliente else "Cliente não encontrado"
 
+def localizar_conta(cpf):
 
-def localizar_agencia_conta_db(cpf):
-
-    _realizar_conexao_db()
+    conectar_db()
 
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    filtrar_cliente = session.query(DadosCliente).filter_by(cpf=cpf).first()
-
-    filtrar_conta = session.query(DadosConta).filter_by(id_cliente=filtrar_cliente.id_cliente).first()
+    cliente = session.query(Tb_cliente).filter_by(cpf=cpf).first()
+    conta = session.query(Tb_conta).filter_by(id_cliente=cliente.id_cliente).first()
 
     session.close()
 
     return {
-                "ID_Cliente": filtrar_conta.id_cliente,
-                "Agência": filtrar_conta.agencia, 
-                "Conta": filtrar_conta.conta, 
-                "Saldo": filtrar_conta.saldo
+                "ID_Cliente": conta.id_cliente,
+                "Agência": conta.agencia, 
+                "Conta": conta.conta, 
+                "Saldo": conta.saldo
             }
-
 
 def cadastrar_cliente(
         nome_cliente: str, 
@@ -145,12 +138,12 @@ def cadastrar_cliente(
 
     try:
 
-        _realizar_conexao_db()
+        conectar_db()
 
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        criar_cliente = DadosCliente(
+        criar_cliente = Tb_cliente(
                 nome_cliente = nome_cliente,
                 genero = genero,
                 cpf = cpf,
@@ -164,11 +157,11 @@ def cadastrar_cliente(
 
         session.add(criar_cliente)
 
-        cliente_aux = session.query(DadosCliente).filter_by(cpf=cpf).first()
+        cliente_aux = session.query(Tb_cliente).filter_by(cpf=cpf).first()
 
         if cliente_aux:
 
-            criar_conta = DadosConta(
+            criar_conta = Tb_conta(
                 id_cliente = cliente_aux.id_cliente,
                 agencia = agencia,
                 conta = conta,
@@ -178,7 +171,7 @@ def cadastrar_cliente(
 
             session.add(criar_conta)
 
-            adicionar_endereco = DadosEndereco(
+            adicionar_endereco = Tb_endereco(
                 id_cliente = cliente_aux.id_cliente,
                 rua = rua,
                 numero = numero,
@@ -192,63 +185,34 @@ def cadastrar_cliente(
             session.add(adicionar_endereco)
 
         session.commit()
-
-        return print('Conta cadastrada com sucesso!')
-
-    except Exception as e:
-
-        return f'Não foi possível concluir a operação devido a um erro identificado.\n\nErro: {e}'
-
-def remover_cliente():
-    pass
-
-def atualizar_dados_cliente(cpf: str, tabela_atualizacao: str,  valor_atualizado: str):
-
-    try:
-
-        retorno_cliente = localizar_cliente_db(cpf)
-
-        Session = sessionmaker(bind=engine)
-        session = Session()
-
-        filtrar_conta = session.query(tabela_atualizacao).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
-
-        filtrar_conta.cpf = valor_atualizado
-
-        session.commit()
-
         session.close()
 
-        return 'Dado atualizado com sucesso!'
+        return 'Conta cadastrada com sucesso!'
 
     except Exception as e:
 
         return f'Não foi possível concluir a operação devido a um erro identificado.\n\nErro: {e}'
 
-def exibir_dados_cliente():
-    pass
-
-def atualizar_saque(cpf: str, valor: float, data_atualizacao: date) -> str:
+def sacar(cpf: str, valor: float, data_atualizacao: date) -> str:
 
     try:
 
-        retorno_cliente = localizar_cliente_db(cpf)
+        retorno_cliente = Tb_cliente(cpf)
 
         print(retorno_cliente)
 
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        filtrar_conta = session.query(DadosConta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
+        conta = session.query(Tb_conta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
 
-        filtrar_conta.saldo -= valor
-        filtrar_conta.data_atualizacao = data_atualizacao
+        conta.saldo -= valor
+        conta.data_atualizacao = data_atualizacao
 
         session.commit()
-
         session.close()
 
-        return "Operação concluída com sucesso!"
+        return 'Operação concluída com sucesso!'
 
     except Exception as e:
 
@@ -258,37 +222,36 @@ def consultar_saldo_bancario(cpf: str) -> str:
 
     try:
 
-        retorno_cliente = localizar_cliente_db(cpf)
+        retorno_cliente = localizar_cliente(cpf)
 
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        filtrar_conta = session.query(DadosConta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
+        conta = session.query(Tb_conta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
 
         session.close()
 
-        return {"Saldo": filtrar_conta.saldo}
+        return {"Saldo": conta.saldo}
 
     except Exception as e:
 
         return print(f'Não foi possível concluir a operação devido a um erro identificado.\n\nErro: {e}')
 
-def atualizar_deposito_bancario(cpf: str, valor: float, data_atualizacao:  datetime) -> str:
+def depositar(cpf: str, valor: float, data_atualizacao:  datetime) -> str:
 
     try:
 
-        retorno_cliente = localizar_cliente_db(cpf)
+        retorno_cliente = localizar_cliente(cpf)
 
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        filtrar_conta = session.query(DadosConta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
+        conta = session.query(Tb_conta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
 
-        filtrar_conta.saldo += valor
-        filtrar_conta.data_atualizacao = data_atualizacao
+        conta.saldo += valor
+        conta.data_atualizacao = data_atualizacao
 
         session.commit()
-
         session.close()
 
         return 'Operação concluída com sucesso!'
@@ -297,7 +260,7 @@ def atualizar_deposito_bancario(cpf: str, valor: float, data_atualizacao:  datet
 
         return f'Não foi possível concluir a operação devido a um erro identificado.\n\nErro: {e}'
 
-def atualizar_transferencia(cpf: str, valor: float, data_atualizacao: datetime, tipo_operacao: str = None) -> str:
+def transferir(cpf: str, valor: float, data_atualizacao: datetime, tipo_operacao: str = None) -> str:
 
     try:
 
@@ -307,22 +270,21 @@ def atualizar_transferencia(cpf: str, valor: float, data_atualizacao: datetime, 
 
         else:
 
-            retorno_cliente = localizar_cliente_db(cpf)
+            retorno_cliente = localizar_cliente(cpf)
 
             Session = sessionmaker(bind=engine)
             session = Session()
 
-            filtrar_conta = session.query(DadosConta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
+            conta = session.query(Tb_conta).filter_by(id_cliente=retorno_cliente['ID_Cliente']).first()
 
             if tipo_operacao == 'beneficiario':
-                filtrar_conta.saldo += valor
-                filtrar_conta.data_atualizacao = data_atualizacao
+                conta.saldo += valor
+                conta.data_atualizacao = data_atualizacao
             elif tipo_operacao is None:
-                filtrar_conta.saldo -= valor
-                filtrar_conta.data_atualizacao = data_atualizacao
+                conta.saldo -= valor
+                conta.data_atualizacao = data_atualizacao
 
             session.commit()
-
             session.close()
 
             return 'Operação concluída com sucesso!'
@@ -335,12 +297,12 @@ def armanezar_transacao(id_cliente: int, valor_transacao: float, tipo_transacao:
 
     try:
 
-        _realizar_conexao_db()
+        conectar_db()
 
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        transacao = DadosTransacao(
+        transacao = Tb_transacao(
                 id_cliente = id_cliente,
                 valor_transacao= valor_transacao,
                 tipo_transacao = tipo_transacao,
@@ -349,12 +311,10 @@ def armanezar_transacao(id_cliente: int, valor_transacao: float, tipo_transacao:
         )
 
         session.add(transacao)
-
         session.commit()
-
         session.close()
 
-        return "Operação concluída com sucesso!"
+        return 'Operação concluída com sucesso!'
 
     except Exception as e:
 
