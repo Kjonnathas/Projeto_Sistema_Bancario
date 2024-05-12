@@ -193,13 +193,11 @@ def cadastrar_cliente(
 
         return f'Não foi possível concluir a operação devido a um erro identificado.\n\nErro: {e}'
 
-def sacar(cpf: str, valor: float, data_atualizacao: date) -> str:
+def sacar(cpf: str, valor: float, data_atualizacao: datetime) -> str:
 
     try:
 
-        retorno_cliente = Tb_cliente(cpf)
-
-        print(retorno_cliente)
+        retorno_cliente = localizar_cliente(cpf)
 
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -237,7 +235,7 @@ def consultar_saldo_bancario(cpf: str) -> str:
 
         return print(f'Não foi possível concluir a operação devido a um erro identificado.\n\nErro: {e}')
 
-def depositar(cpf: str, valor: float, data_atualizacao:  datetime) -> str:
+def depositar(cpf: str, valor: float, data_atualizacao: datetime) -> str:
 
     try:
 
@@ -319,3 +317,33 @@ def armanezar_transacao(id_cliente: int, valor_transacao: float, tipo_transacao:
     except Exception as e:
 
         return f'Não foi possível commitar a transação realizada devio a um erro identificado.\n\nErro: {e}'
+
+def exibir_dados(cpf):
+
+    conectar_db()
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    cliente = session.query(Tb_cliente).filter_by(cpf=cpf).first()
+    endereco = session.query(Tb_endereco).filter_by(id_cliente=cliente.id_cliente).first()
+
+    session.close()
+
+    return {
+                "ID_Cliente": cliente.id_cliente,
+                "Nome_cliente": cliente.nome_cliente,
+                "Gênero": cliente.genero,
+                "CPF": cliente.cpf, 
+                "RG": cliente.rg,
+                "Data_nascimento": cliente.data_nascimento,
+                "Email": cliente.email,
+                "Celular": cliente.celular,
+                "Renda": cliente.renda,
+                "Rua": endereco.rua,
+                "Número": endereco.numero,
+                "Bairro": endereco.bairro,
+                "Cidade": endereco.cidade,
+                "UF": endereco.uf,
+                "CEP": endereco.cep
+            }
