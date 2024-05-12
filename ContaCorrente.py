@@ -8,7 +8,7 @@ from email_validator import validate_email
 import re
 import random
 import hashlib
-from DatabaseManager import localizar_cliente, localizar_conta, transferir, depositar, sacar, armanezar_transacao, consultar_saldo_bancario, cadastrar_cliente
+from DatabaseManager import localizar_cliente, localizar_conta, transferir, depositar, sacar, consultar_saldo_bancario, armanezar_transacao, exibir_dados, cadastrar_cliente
 
 class ContaCorrente:
 
@@ -52,8 +52,8 @@ class ContaCorrente:
         while True:
             self._cpf = input(f'Obrigado, {self._nome.split()[0].title()}!\n\nEstou muito feliz de poder atendê-lo (a)!\n\nAgora, você poderia me informar o seu CPF (somente números)? ').strip()
             self._cpf = '{}.{}.{}-{}'.format(self._cpf[:3], self._cpf[3:6], self._cpf[6:9], self._cpf[9:])
-            localizar_cliente = self._localizar_cliente(self._cpf)
-            if localizar_cliente != 'Cliente não encontrado':
+            localizar_cliente_ = localizar_cliente(self._cpf)
+            if localizar_cliente_ != 'Cliente não encontrado':
                 os.system('cls')
                 print(f'{self._nome.split()[0]}, verifiquei que você é nosso (a) cliente. Seja bem-vindo (a) ao seu autoatendimento.')
                 self._inicializar_atendimento_cliente()
@@ -68,9 +68,6 @@ class ContaCorrente:
                     print('O CPF digitado é inválido. Por favor, digite novamente.')
                     time.sleep(5)
                     os.system('cls')
-
-    def _localizar_cliente(self, cpf) -> dict | str:
-        return localizar_cliente(cpf)
 
     def _continuar_atendimento(self) -> str :
         while True:
@@ -197,18 +194,24 @@ class ContaCorrente:
                     time.sleep(5)
                     os.system('cls')
                 else:
+                    os.system('cls')
                     return self._profissao
 
     def _validar_valor(self, valor):
-        verificar_valor = valor.replace(',', '_').replace('.', '').replace('_', '.')
-        if float(verificar_valor) == 0 or float(verificar_valor) < 0:
-            return 'valor inválido'
+        valor = valor.strip()
+        regex_valor = re.compile(r'^\d+(\.\d{3})*(?:,\d{1,2})?$')
+        if regex_valor.match(valor):
+            if regex_valor.match(valor):
+                valor = valor.replace(',', '_')
+                valor = valor.replace('.', '')
+                valor = valor.replace('_', '.')
+                valor = float(valor)
+                if float(valor) == 0 or float(valor) < 0:
+                    return 'valor inválido'
+                else:
+                    return valor
         else:
-            regex_valor = re.compile(r'^\d+(\.\d{3})*(?:,\d{1,2})?$')
-            if regex_valor.match(verificar_valor):
-                return float(valor.replace(',', '_').replace('.', '').replace('_', '.'))
-            else:
-                return 'valor inválido'
+            return 'valor inválido'
 
     def _validar_renda(self) -> float | None:
         while True:
@@ -364,20 +367,30 @@ class ContaCorrente:
 
     def exibir_dados_pessoais(self) -> str:
         os.system('cls')
-        localizar_cliente_ = localizar_cliente(self._cpf)
-        data_nascimento = datetime.strftime(localizar_cliente_['Data_nascimento'], format='%d/%m/%Y')
+        localizar_dados = exibir_dados(self._cpf)
+        data_nascimento = datetime.strftime(localizar_dados['Data_nascimento'], format='%d/%m/%Y')
+        renda = 'Não cadastrado' if localizar_dados['Renda'] == None else 'R$ {:,.2f}'.format(localizar_dados['Renda']).replace('.', '_').replace(',', '.').replace('_', ',')
+        email = 'Não cadastrado' if localizar_dados['Email'] == None else localizar_dados['Email']
+        celular = 'Não cadastrado' if localizar_dados['Celular'] == None else localizar_dados['Celular']
 
         print(f'Dados pessoais de {self._nome}:\n')
-        print(f'CPF: {localizar_cliente_["CPF"]}')
-        print(f'RG: {localizar_cliente_["RG"]}')
+        print(f'CPF: {localizar_dados["CPF"]}')
+        print(f'RG: {localizar_dados["RG"]}')
         print(f'Data de Nascimento: {data_nascimento}')
-        print(f'Gênero: {localizar_cliente_["Gênero"]}')
-        print(f'Renda: {localizar_cliente_["Renda"]}')
-        print(f'E-mail: {localizar_cliente_["Email"]}')
-        print(f'Celular: {localizar_cliente_["Celular"]}')
+        print(f'Gênero: {localizar_dados["Gênero"]}')
+        print(f'Renda: {renda}')
+        print(f'E-mail: {email}')
+        print(f'Celular: {celular}')
+        print(f'Rua: {localizar_dados["Rua"]}')
+        print(f'Número: {localizar_dados["Número"]}')
+        print(f'Bairro: {localizar_dados["Bairro"]}')
+        print(f'Cidade: {localizar_dados["Cidade"]}')
+        print(f'UF: {localizar_dados["UF"]}')
+        print(f'CEP: {localizar_dados["CEP"]}')
 
         time.sleep(15)
         os.system('cls')
+        retorno = None
         while retorno != 'S' and retorno != 'N':
             retorno = input('Você gostaria de realizar alguma outra operação? (S/N) ').strip()
             if retorno == 'N':
@@ -394,16 +407,18 @@ class ContaCorrente:
                 os.system('cls')
 
     def consultar_saldo(self) -> str:
+        os.system('cls')
         self._saldo = consultar_saldo_bancario(self._cpf)
         self._saldo = float(self._saldo['Saldo'])
         print('O saldo da sua conta bancária é de R$ {:,.2f}'.format(self._saldo).replace('.', '_').replace(',', '.').replace('_', ','))
-        time.sleep(10)
+        time.sleep(5)
         os.system('cls')
 
     def depositar_dinheiro(self) -> str:
         while True:
+            os.system('cls')
             valor_deposito = input('Quanto você gostaria de depositar? ').strip()
-            if not deposito:
+            if not valor_deposito:
                 print('Nenhum valor informado. Caso queira cancelar a operação digite "Cancelar".')
                 time.sleep(5)
                 os.system('cls')
@@ -433,14 +448,16 @@ class ContaCorrente:
                             protocolo_transacao=(protocolo_operacao:= self._criar_chave_hash(self._nome, self._cpf)),
                             data_atualizacao=ContaCorrente._data_hora()
                         )
-                        print(f'Depósito realizado com sucesso!\n\nO protocolo da operação é: {protocolo_operacao}\n\nObrigado e volte sempre!')
-                        time.sleep(10)
+                        print(f'Depósito realizado com sucesso!\n\nO protocolo da operação é: {protocolo_operacao}')
+                        time.sleep(5)
                         os.system('cls')
                         return self.consultar_saldo()
 
-    def transferir_dinheiro(self):
+    def transferir_dinheiro(self) -> str | None:
         while True:
-            cpf_beneficiario = input('Por favor, informe o CPF do beneficiário: ').strip()
+            os.system('cls')
+            cpf_beneficiario = input('Por favor, informe o CPF do beneficiário (somente números): ').strip()
+            cpf_beneficiario = '{}.{}.{}-{}'.format(cpf_beneficiario[:3], cpf_beneficiario[3:6], cpf_beneficiario[6:9], cpf_beneficiario[9:])
             if not cpf_beneficiario:
                 print('Nenhum CPF informado. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
                 time.sleep(5)
@@ -458,23 +475,24 @@ class ContaCorrente:
                 if localizar_cliente_ != 'Cliente não encontrado':
                     agencia_beneficiario = input('Por favor, informe o número da agência: ').strip()
                     conta_beneficiario = input('Por favor, informe o número da conta: ').strip()
+                    os.system('cls')
                     print('Localizando agência e conta do beneficiário...')
                     time.sleep(5)
                     os.system('cls')
                     localizar_conta_ = localizar_conta(cpf_beneficiario)
                     if agencia_beneficiario == localizar_conta_['Agência'] and conta_beneficiario == localizar_conta_['Conta']:
-                        valor = input(f'Quanto você gostaria de transferir para {localizar_cliente["Nome_cliente"]}? ').strip()
+                        valor = input(f'Quanto você gostaria de transferir para {localizar_cliente_["Nome_cliente"]}? ').strip()
                         valor_transferencia = self._validar_valor(valor)
                         if valor_transferencia != 'valor inválido':
-                            if (localizar_conta['Saldo'] + self._limite_cheque_especial()) >= valor_transferencia:
+                            if (localizar_conta_['Saldo'] + self._limite_cheque_especial()) >= valor_transferencia:
                                 retorno_atualizar_transferencia = transferir(
-                                                                        cpf_beneficiario, 
-                                                                        valor_transferencia, 
+                                                                        cpf=cpf_beneficiario, 
+                                                                        valor=valor_transferencia, 
                                                                         data_atualizacao=ContaCorrente._data_hora(), 
                                                                         tipo_operacao='beneficiario'
                                                                         )
                                 armanezar_transacao(
-                                                    id_cliente=localizar_cliente['ID_Cliente'],
+                                                    id_cliente=localizar_cliente_['ID_Cliente'],
                                                     valor_transacao=valor_transferencia,
                                                     tipo_transacao="Transferência", 
                                                     protocolo_transacao=(protocolo_operacao:= self._criar_chave_hash(self._nome, self._cpf)),
@@ -482,8 +500,8 @@ class ContaCorrente:
                                                     )
                                 if retorno_atualizar_transferencia == 'Operação concluída com sucesso!':
                                         transferir(
-                                                self._cpf, 
-                                                valor_transferencia, 
+                                                cpf=self._cpf, 
+                                                valor=valor_transferencia, 
                                                 data_atualizacao=ContaCorrente._data_hora()
                                                 )
                                         id_cliente_titular = self._localizar_cliente(self._cpf)
@@ -494,10 +512,11 @@ class ContaCorrente:
                                                     protocolo_transacao=protocolo_operacao,
                                                     data_atualizacao=ContaCorrente._data_hora()
                                                     )
-                                        print(f'Transferência concluída com sucesso!\n\nO protocolo da operação é: {protocolo_operacao}\n\nObrigado e volte sempre!')
-                                        time.sleep(10)
                                         os.system('cls')
-                                        break
+                                        print(f'Transferência concluída com sucesso!\n\nO protocolo da operação é: {protocolo_operacao}')
+                                        time.sleep(5)
+                                        os.system('cls')
+                                        return self.consultar_saldo()
                                 else:
                                     print('Não foi possível concluir a transferência.')
                                     time.sleep(5)
@@ -509,17 +528,19 @@ class ContaCorrente:
                                 os.system('cls')
                                 self.consultar_saldo()
                                 while retorno != 'N' and retorno != 'S':
+                                    os.system('cls')
                                     retorno = input('Você gostaria de transferir outro valor? (S/N): ').strip()
                                     if retorno == 'N':
                                         os.system('cls')
                                         while novo_retorno != 'N' and novo_retorno != 'S':
+                                            os.system('cls')
                                             novo_retorno = input(f'Entendemos, {self._nome.split()[0].title()}. Você gostaria de realizar alguma outra operação? (S/N) ').strip()
                                             if novo_retorno == 'N':
                                                 os.system('cls')
                                                 print(f'Sendo assim, vamos encerrar o seu atendimento, {self._nome.split()[0].title()}.\n\n Obrigado e volte sempre!')
                                                 time.sleep(5)
                                                 os.system('cls')
-                                                break
+                                                return None
                                             elif novo_retorno == 'S':
                                                 return self._inicializar_atendimento_cliente()
                                             else:
@@ -538,8 +559,9 @@ class ContaCorrente:
                     time.sleep(5)
                     os.system('cls')
 
-    def sacar_dinheiro(self) -> str:
+    def sacar_dinheiro(self) -> str | None:
         while True:
+            os.system('cls')
             valor = input('Qual o valor você gostaria de sacar, por gentileza? ').strip()
             if not valor:
                 print('Nenhum valor de saque foi informado. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
@@ -555,7 +577,7 @@ class ContaCorrente:
                     valor_saque = self._validar_valor(valor)
                     if valor_saque != 'valor inválido':
                         saldo_bancario = consultar_saldo_bancario(cpf=self._cpf)
-                        if saldo_bancario['Saldo'] + self._limite_cheque_especial() >= valor_saque:
+                        if (saldo_bancario['Saldo'] + self._limite_cheque_especial()) >= valor_saque:
                             localizar_cliente_ = localizar_cliente(cpf=self._cpf)
                             sacar(
                                     cpf=self._cpf, 
@@ -563,35 +585,40 @@ class ContaCorrente:
                                     data_atualizacao=ContaCorrente._data_hora()
                                     )
                             armanezar_transacao(
-                                id_cliente=localizar_cliente['ID_Cliente'],
+                                id_cliente=localizar_cliente_['ID_Cliente'],
                                 valor_transacao=valor_saque,
                                 tipo_transacao='Saque',
                                 protocolo_transacao=(protocolo_operacao:= self._criar_chave_hash(self._nome, self._cpf)),
-                                data_atualizacao=self._data_hora()
+                                data_atualizacao=ContaCorrente._data_hora()
                                 )
-                            print(f'Saque realizado com sucesso!\n\nO protocolo da operação é: {protocolo_operacao}\n\nObrigado e volte sempre!')
+                            os.system('cls')
+                            print(f'Saque realizado com sucesso!\n\nO protocolo da operação é: {protocolo_operacao}')
                             time.sleep(5)
-                            self.consultar_saldo()
-                            break
+                            return self.consultar_saldo()
                         else:
                             print('O valor informado não pode ser sacado por falta de saldo na conta.')
                             time.sleep(5)
                             os.system('cls')
                             self.consultar_saldo()
-                            while retorno != 'N' and retorno != 'S': 
+                            retorno = None
+                            while retorno != 'N' and retorno != 'S':
+                                os.system('cls')
                                 retorno = input('Você gostaria de sacar outro valor? (S/N): ').strip()
                                 if retorno == 'N':
                                     os.system('cls')
-                                    while novo_retorno != 'N' and novo_retorno != 'S': 
+                                    novo_retorno = None
+                                    while novo_retorno != 'N' and novo_retorno != 'S':
+                                        os.system('cls')
                                         novo_retorno = input(f'Entendemos, {self._nome.split()[0].title()}. Você gostaria de realizar alguma outra operação? (S/N) ').strip()
                                         if novo_retorno == 'N':
                                             os.system('cls')
                                             print(f'Sendo assim, vamos encerrar o seu atendimento, {self._nome.split()[0].title()}.\n\nObrigado e volte sempre!')
                                             time.sleep(5)
                                             os.system('cls')
-                                            break
+                                            return None
                                         elif novo_retorno == 'S':
                                             return self._inicializar_atendimento_cliente()
                                         else:
                                             print('A resposta informada é inválida. Por favor, digite novamente.')
-                    print('O valor informado é inválido. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
+                    else:
+                        print('O valor informado é inválido. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
