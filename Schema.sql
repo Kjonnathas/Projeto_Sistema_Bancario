@@ -1,3 +1,4 @@
+-- Criação da dimensão d_clientes
 
 CREATE TABLE d_clientes(
 	id_cliente SERIAL,
@@ -17,6 +18,8 @@ CREATE TABLE d_clientes(
 	CONSTRAINT renda_d_clientes_ck CHECK (renda >= 0 or renda IS NULL)
 );
 
+-- Criação da dimensão d_dados_conta
+
 CREATE TABLE d_dados_conta(
 	id_conta SERIAL,
 	id_cliente INTEGER NOT NULL,
@@ -31,6 +34,8 @@ CREATE TABLE d_dados_conta(
 	CONSTRAINT conta_d_dados_conta_un UNIQUE (conta)
 );
 
+-- Criação da dimensão d_enderecos
+
 CREATE TABLE d_enderecos(
 	id_endereco SERIAL,
 	id_cliente INTEGER NOT NULL,
@@ -44,6 +49,8 @@ CREATE TABLE d_enderecos(
 	CONSTRAINT id_endereco_d_enderecos_pk PRIMARY KEY (id_endereco),
 	CONSTRAINT id_cliente_d_enderecos_fk FOREIGN KEY (id_cliente) REFERENCES d_clientes(id_cliente)
 );
+
+-- Criação da fato f_transacoes
 
 CREATE TABLE f_transacoes(
 	id_transacao SERIAL,
