@@ -1,4 +1,5 @@
-from ContaCorrente import ContaCorrente, cadastrar_cliente
+from ContaCorrente import ContaCorrente
+from DatabaseManager import cadastrar_cliente
 
 if __name__ == '__main__':
 
