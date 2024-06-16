@@ -8,7 +8,8 @@ from email_validator import validate_email
 import re
 import random
 import hashlib
-from DatabaseManager import localizar_cliente, localizar_conta, transferir, depositar, sacar, consultar_saldo_bancario, armanezar_transacao, exibir_dados, cadastrar_cliente
+from DatabaseManager import localizar_cliente, localizar_conta, transferir, depositar, sacar, consultar_saldo_bancario, armanezar_transacao, exibir_dados
+
 
 class ContaCorrente:
 
@@ -201,15 +202,14 @@ class ContaCorrente:
         valor = valor.strip()
         regex_valor = re.compile(r'^\d+(\.\d{3})*(?:,\d{1,2})?$')
         if regex_valor.match(valor):
-            if regex_valor.match(valor):
-                valor = valor.replace(',', '_')
-                valor = valor.replace('.', '')
-                valor = valor.replace('_', '.')
-                valor = float(valor)
-                if float(valor) == 0 or float(valor) < 0:
-                    return 'valor inválido'
-                else:
-                    return valor
+            valor = valor.replace(',', '_')
+            valor = valor.replace('.', '')
+            valor = valor.replace('_', '.')
+            valor = float(valor)
+            if float(valor) == 0 or float(valor) < 0:
+                return 'valor inválido'
+            else:
+                return valor
         else:
             return 'valor inválido'
 
