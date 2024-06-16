@@ -1,3 +1,8 @@
+
+-- Criação do Schema
+
+CREATE SCHEMA financeiro;
+
 -- Criação da dimensão d_clientes
 
 CREATE TABLE d_clientes(
@@ -11,6 +16,8 @@ CREATE TABLE d_clientes(
 	celular VARCHAR(15),
 	profissao VARCHAR(100),
 	renda FLOAT,
+	data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	data_fim TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	data_atualizacao TIMESTAMP NOT NULL,
 	CONSTRAINT id_cliente_d_clientes_pk PRIMARY KEY (id_cliente),
 	CONSTRAINT cpf_d_clientes_un UNIQUE (cpf),
@@ -25,8 +32,10 @@ CREATE TABLE d_dados_conta(
 	id_cliente INTEGER NOT NULL,
 	agencia VARCHAR(4) NOT NULL,
 	conta VARCHAR(10) NOT NULL,
-	tipo_conta VARCHAR(15) NOT NULL,
+	tipo_conta VARCHAR(12) NOT NULL,
 	saldo FLOAT NOT NULL,
+	data_abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	data_fechamento TIMESTAMP,
 	data_atualizacao TIMESTAMP NOT NULL,
 	CONSTRAINT id_conta_d_dados_conta_pk PRIMARY KEY (id_conta),
 	CONSTRAINT id_cliente_d_dados_conta_fk FOREIGN KEY (id_cliente) REFERENCES d_clientes(id_cliente),
@@ -62,3 +71,5 @@ CREATE TABLE f_transacoes(
 	CONSTRAINT id_transacao_f_transacoes_pk PRIMARY KEY (id_transacao),
 	CONSTRAINT id_cliente_f_transacoes_fk FOREIGN KEY (id_cliente) REFERENCES d_clientes(id_cliente)
 );
+
+
