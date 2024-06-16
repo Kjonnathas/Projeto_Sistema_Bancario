@@ -1,11 +1,20 @@
 
+-- Criação do Banco de Dados
+
+CREATE DATABASE db_transacional
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
 -- Criação do Schema
 
 CREATE SCHEMA financeiro;
 
 -- Criação da dimensão d_clientes
 
-CREATE TABLE d_clientes(
+CREATE TABLE financeiro.d_clientes(
 	id_cliente SERIAL,
 	nome_cliente VARCHAR(100) NOT NULL,
 	genero CHAR(1) NOT NULL,
@@ -27,7 +36,7 @@ CREATE TABLE d_clientes(
 
 -- Criação da dimensão d_dados_conta
 
-CREATE TABLE d_dados_conta(
+CREATE TABLE financeiro.d_dados_conta(
 	id_conta SERIAL,
 	id_cliente INTEGER NOT NULL,
 	agencia VARCHAR(4) NOT NULL,
@@ -38,14 +47,14 @@ CREATE TABLE d_dados_conta(
 	data_fechamento TIMESTAMP,
 	data_atualizacao TIMESTAMP NOT NULL,
 	CONSTRAINT id_conta_d_dados_conta_pk PRIMARY KEY (id_conta),
-	CONSTRAINT id_cliente_d_dados_conta_fk FOREIGN KEY (id_cliente) REFERENCES d_clientes(id_cliente),
+	CONSTRAINT id_cliente_d_dados_conta_fk FOREIGN KEY (id_cliente) REFERENCES financeiro.d_clientes(id_cliente),
 	CONSTRAINT agencia_d_dados_conta_un UNIQUE (agencia),
 	CONSTRAINT conta_d_dados_conta_un UNIQUE (conta)
 );
 
 -- Criação da dimensão d_enderecos
 
-CREATE TABLE d_enderecos(
+CREATE TABLE financeiro.d_enderecos(
 	id_endereco SERIAL,
 	id_cliente INTEGER NOT NULL,
 	rua VARCHAR(100) NOT NULL,
@@ -56,12 +65,12 @@ CREATE TABLE d_enderecos(
 	cep VARCHAR(9) NOT NULL,
 	data_atualizacao TIMESTAMP NOT NULL,
 	CONSTRAINT id_endereco_d_enderecos_pk PRIMARY KEY (id_endereco),
-	CONSTRAINT id_cliente_d_enderecos_fk FOREIGN KEY (id_cliente) REFERENCES d_clientes(id_cliente)
+	CONSTRAINT id_cliente_d_enderecos_fk FOREIGN KEY (id_cliente) REFERENCES financeiro.d_clientes(id_cliente)
 );
 
 -- Criação da fato f_transacoes
 
-CREATE TABLE f_transacoes(
+CREATE TABLE financeiro.f_transacoes(
 	id_transacao SERIAL,
 	id_cliente INTEGER NOT NULL,
 	valor_transacao FLOAT,
@@ -69,7 +78,7 @@ CREATE TABLE f_transacoes(
 	protocolo_transacao VARCHAR(100) NOT NULL,
 	data_atualizacao TIMESTAMP NOT NULL,
 	CONSTRAINT id_transacao_f_transacoes_pk PRIMARY KEY (id_transacao),
-	CONSTRAINT id_cliente_f_transacoes_fk FOREIGN KEY (id_cliente) REFERENCES d_clientes(id_cliente)
+	CONSTRAINT id_cliente_f_transacoes_fk FOREIGN KEY (id_cliente) REFERENCES financeiro.d_clientes(id_cliente)
 );
 
 
