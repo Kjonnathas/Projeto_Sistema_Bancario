@@ -1,13 +1,12 @@
-from sqlalchemy import create_engine, Column, Integer, String, Date, DateTime, Float, ForeignKey
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, Column, Integer, String, Date, DateTime, Float, ForeignKey, TIMESTAMP, func
+from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.engine import Engine
 from datetime import datetime, date
 import os
 from dotenv import load_dotenv
 
 # Carrega as variáveis de ambiente do arquivo .env
-load_dotenv()
+load_dotenv('.env')
 
 # Cria a base declarativa - realiza o mapeamento objeto-relacional (ORM) para definir as classes que mapeiam as tabelas no banco de dados -.
 Base = declarative_base()
@@ -16,59 +15,70 @@ Base = declarative_base()
 class Tb_cliente(Base):
 
         __tablename__ = 'd_clientes'
+        __table_args__ = {'schema': 'financeiro'}
 
-        id_cliente = Column(Integer, primary_key=True)
-        nome_cliente = Column(String)
-        genero = Column(String)
-        cpf = Column(String)
-        rg = Column(String)
-        data_nascimento = Column(Date)
+        id_cliente = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+        nome = Column(String, nullable=False)
+        sobrenome = Column(String, nullable=False)
+        genero = Column(String, nullable=False)
+        cpf = Column(String, unique=True, nullable=False)
+        rg = Column(String, unique=True, nullable=False)
+        data_nascimento = Column(Date, nullable=False)
         email = Column(String)
         celular = Column(String)
+        profissao = Column(String)
         renda = Column(Float)
-        data_atualizacao = Column(DateTime)
+        data_cadastro = Column(DateTime, server_default=func.current_timestamp(), nullable=False)
+        data_fim = Column(DateTime)
+        data_atualizacao = Column(DateTime, nullable=False)
 
 
 # Definição da classe de modelo que mapeia a tabela 'd_dados_conta' do banco de dados
 class Tb_conta(Base):
 
         __tablename__ = 'd_dados_conta'
+        __table_args__ = {'schema': 'financeiro'}
 
-        id_conta = Column(Integer, primary_key=True)
-        id_cliente = Column(Integer, ForeignKey('d_clientes.id_cliente'))
-        agencia = Column(String, unique=True)
-        conta = Column(String, unique=True)
+        id_conta = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+        id_cliente = Column(Integer, ForeignKey('financeiro.d_clientes.id_cliente'), nullable=False)
+        agencia = Column(String, unique=True, nullable=False)
+        conta = Column(String, unique=True, nullable=False)
+        tipo_conta = Column(String, nullable=False)
         saldo = Column(Float)
-        data_atualizacao = Column(DateTime)
+        data_abertura = Column(DateTime, server_default=func.current_timestamp(), nullable=False)
+        data_fechamento = Column(DateTime)
+        data_atualizacao = Column(DateTime, nullable=False)
 
 
 # Definição da classe de modelo que mapeia a tabela 'd_enderecos' do banco de dados
 class Tb_endereco(Base):
 
         __tablename__ = 'd_enderecos'
+        __table_args__ = {'schema': 'financeiro'}
 
-        id_endereco = Column(Integer, primary_key=True)
-        id_cliente = Column(Integer, ForeignKey('d_clientes.id_cliente'))
-        rua = Column(String)
-        numero = Column(String)
-        bairro = Column(String)
-        cidade = Column(String)
-        uf = Column(String)
-        cep = Column(String)
-        data_atualizacao = Column(DateTime)
+        id_endereco = Column(Integer, primary_key=True, nullable=False)
+        id_cliente = Column(Integer, ForeignKey('financeiro.d_clientes.id_cliente'), nullable=False)
+        rua = Column(String, nullable=False)
+        numero = Column(String, nullable=False)
+        bairro = Column(String, nullable=False)
+        cidade = Column(String, nullable=False)
+        uf = Column(String, nullable=False)
+        cep = Column(String, nullable=False)
+        data_atualizacao = Column(DateTime, nullable=False)
 
 
 # Definição da classe de modelo que mapeia a tabela 'f_transacoes' do banco de dados
 class Tb_transacao(Base):
 
         __tablename__ = 'f_transacoes'
+        __table_args__ = {'schema': 'financeiro'}
 
-        id_transacao = Column(Integer, primary_key=True)
-        id_cliente = Column(Integer, ForeignKey('d_clientes.id_cliente'))
-        valor_transacao = Column(Float)
-        tipo_transacao = Column(String)
-        protocolo_transacao = Column(String)
-        data_atualizacao = Column(DateTime)
+        id_transacao = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+        id_cliente = Column(Integer, ForeignKey('financeiro.d_clientes.id_cliente'), nullable=False)
+        valor_transacao = Column(Float, nullable=False)
+        tipo_transacao = Column(String, nullable=False)
+        protocolo_transacao = Column(String, nullable=False)
+        data_atualizacao = Column(DateTime, nullable=False)
 
 
 def conectar_db() -> Engine:
@@ -85,12 +95,21 @@ def conectar_db() -> Engine:
     O retorno da função conectar_db é a engine de conexão ao banco de dados, que servirá posteriormente para interação de outras ações como "INSERT", "UPDATE" e "DELETE".
     '''
 
-    username = os.getenv('USERNAME')
-    password = os.getenv('PASSWORD')
-    hostname = os.getenv('HOSTNAME')
-    database_name = os.getenv('DATABASE_NAME')
+    # Carrega as variáveis de ambiente do arquivo .env
 
-    connection = f'postgresql://{username}:{password}@{hostname}/{database_name}'
+    # POSTGRES_USER = os.getenv('POSTGRES_USER')
+    # POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+    # POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+    # POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+    # POSTGRES_DB = os.getenv('POSTGRES_DB')
+
+    POSTGRES_USER = 'postgres'
+    POSTGRES_PASSWORD = 'postgre527961'
+    POSTGRES_HOST = 'localhost'
+    POSTGRES_PORT = '5432'
+    POSTGRES_DB = 'db_transacional'
+
+    connection = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
     # global engine
     engine = create_engine(connection)
 
@@ -171,10 +190,12 @@ def cadastrar_cliente(
         rg: str, 
         data_nascimento: date, 
         email: str, 
-        celular: str, 
+        celular: str,
+        profissao: str,
         renda: float, 
         agencia: str,
         conta: str,
+        tipo_conta: str,
         saldo: float,
         rua: str,
         numero: str,
@@ -216,6 +237,7 @@ def cadastrar_cliente(
                 data_nascimento = data_nascimento,
                 email = email,
                 celular = celular,
+                profissao = profissao,
                 renda = renda,
                 data_atualizacao = data_atualizacao
         )
@@ -234,6 +256,7 @@ def cadastrar_cliente(
                 id_cliente = cliente_aux.id_cliente,
                 agencia = agencia,
                 conta = conta,
+                tipo_conta = tipo_conta,
                 saldo = saldo,
                 data_atualizacao = data_atualizacao
             )
@@ -574,6 +597,7 @@ def exibir_dados(cpf: str) -> dict:
                 "Data_nascimento": cliente.data_nascimento,
                 "Agência": conta.agencia,
                 "Conta": conta.conta,
+                "Saldo": conta.saldo,
                 "Email": cliente.email,
                 "Celular": cliente.celular,
                 "Renda": cliente.renda,
