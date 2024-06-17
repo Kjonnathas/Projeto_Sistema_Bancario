@@ -16,7 +16,8 @@ CREATE SCHEMA financeiro;
 
 CREATE TABLE financeiro.d_clientes(
 	id_cliente SERIAL,
-	nome_cliente VARCHAR(100) NOT NULL,
+	nome VARCHAR(20) NOT NULL,
+	sobrenome VARCHAR(100) NOT NULL,
 	genero CHAR(1) NOT NULL,
 	cpf VARCHAR(14) NOT NULL,
 	rg VARCHAR(12) NOT NULL,
@@ -26,7 +27,7 @@ CREATE TABLE financeiro.d_clientes(
 	profissao VARCHAR(100),
 	renda FLOAT,
 	data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	data_fim TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	data_fim TIMESTAMP,
 	data_atualizacao TIMESTAMP NOT NULL,
 	CONSTRAINT id_cliente_d_clientes_pk PRIMARY KEY (id_cliente),
 	CONSTRAINT cpf_d_clientes_un UNIQUE (cpf),
