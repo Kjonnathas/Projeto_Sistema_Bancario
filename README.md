@@ -4,7 +4,7 @@ O projeto está sendo desenvolvido com o objetivo de colocar em prática o conhe
 
 ## Estrutura do Projeto
 
-O projeto foi estruturado para receber dados de uma aplicação - inicialmente vindo do terminal - e posteriormente carregados em um banco de dados PostgreSQL. Nesse projeto foi desenvolvido um Diagrama Entida-Relacionamento (DER) para idealizar o schema do banco de dados.
+O projeto foi estruturado para receber dados de uma aplicação - inicialmente vindo do terminal - e posteriormente carregados em um banco de dados PostgreSQL. Nesse projeto foi desenvolvido um Diagrama Entidade-Relacionamento (DER) para idealizar o schema do banco de dados.
 
 ![DER](DER.png)
 
