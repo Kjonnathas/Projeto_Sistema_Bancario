@@ -21,6 +21,7 @@ class ContaCorrente:
 
     def __init__(self):
         self._nome = self._validar_nome()
+        self._sobrenome = self._validar_sobrenome()
         self._cpf = self._validar_cpf()
         if self.resposta_atendimento is None or self.resposta_atendimento == 'N':
             sys.exit()
@@ -39,13 +40,24 @@ class ContaCorrente:
 
     def _validar_nome(self) -> str:
         while True:
-            self._nome = input('Olá, seja bem-vindo ao J.P. Morgan. Poderia me informar o seu nome? ').strip()
+            self._nome = input('Olá, seja bem-vindo ao J.P. Morgan. Poderia me informar o seu primeiro nome? ').strip()
             validar_nome = self._nome.replace(' ', '')
             if validar_nome.isalpha():
                 os.system('cls')
                 return self._nome.title()
             else:
                 print('O nome digitado é inválido. Por favor, digite novamente.')
+                time.sleep(5)
+                os.system('cls')
+
+    def _validar_sobrenome(self) -> str:
+        while True:
+            self._sobrenome = input(f'{self._nome}, seu nome é muito bonito. Qual seria o seu sobrenome? ').strip()
+            if self._sobrenome.isalpha():
+                os.system('cls')
+                return self._nome.title()
+            else:
+                print('O sobrenome digitado é inválido. Por favor, digite novamente.')
                 time.sleep(5)
                 os.system('cls')
 
@@ -198,7 +210,7 @@ class ContaCorrente:
                     os.system('cls')
                     return self._profissao
 
-    def _validar_valor(self, valor):
+    def _validar_valor(self, valor: str) -> float | str:
         valor = valor.strip()
         regex_valor = re.compile(r'^\d+(\.\d{3})*(?:,\d{1,2})?$')
         if regex_valor.match(valor):
@@ -229,6 +241,7 @@ class ContaCorrente:
                     os.system('cls')
                 else:
                     self._renda = self._validar_valor(self._renda)
+                    os.system('cls')
                     return self._renda
 
     def _validar_endereco(self) -> dict:
@@ -334,12 +347,13 @@ class ContaCorrente:
                     self.consultar_saldo()
                     break
                 case 6:
+                    os.system('cls')
                     print('Opção de sair foi selecionada. Agradecemos o contato e nos desculpe qualquer coisa.')
-                    time.sleep(3)
+                    time.sleep(5)
                     os.system('cls')
                     break
                 case _:
-                    print('Opção digita é inválida. Por favor, digite uma opção válida.')
+                    print('Opção digitada é inválida. Por favor, digite uma opção válida.')
 
     def _criar_chave_hash(self, nome_cliente, cpf) -> str:
         mensagem = '{}_{}'.format(nome_cliente, cpf)
@@ -357,36 +371,36 @@ class ContaCorrente:
         return chave_hash
 
     def _limite_cheque_especial(self) -> float:
-        localizar_cliente_ = localizar_cliente(self._cpf)
-        if localizar_cliente_['Renda'] == None:
+        dados_cliente = exibir_dados(self._cpf)
+        if dados_cliente['Renda'] == None:
             self.limite_cheque_especial = 500
             return self.limite_cheque_especial
         else:
-            self.limite_cheque_especial = localizar_cliente_['Renda'] * 3
+            self.limite_cheque_especial = dados_cliente['Renda'] * 3
             return self.limite_cheque_especial
 
     def exibir_dados_pessoais(self) -> str:
         os.system('cls')
-        localizar_dados = exibir_dados(self._cpf)
-        data_nascimento = datetime.strftime(localizar_dados['Data_nascimento'], format='%d/%m/%Y')
-        renda = 'Não cadastrado' if localizar_dados['Renda'] == None else 'R$ {:,.2f}'.format(localizar_dados['Renda']).replace('.', '_').replace(',', '.').replace('_', ',')
-        email = 'Não cadastrado' if localizar_dados['Email'] == None else localizar_dados['Email']
-        celular = 'Não cadastrado' if localizar_dados['Celular'] == None else localizar_dados['Celular']
+        dados_cliente = exibir_dados(self._cpf)
+        data_nascimento = datetime.strftime(dados_cliente['Data_nascimento'], format='%d/%m/%Y')
+        renda = 'Não cadastrado' if dados_cliente['Renda'] == None else 'R$ {:,.2f}'.format(dados_cliente['Renda']).replace('.', '_').replace(',', '.').replace('_', ',')
+        email = 'Não cadastrado' if dados_cliente['Email'] == None else dados_cliente['Email']
+        celular = 'Não cadastrado' if dados_cliente['Celular'] == None else dados_cliente['Celular']
 
         print(f'Dados pessoais de {self._nome}:\n')
-        print(f'CPF: {localizar_dados["CPF"]}')
-        print(f'RG: {localizar_dados["RG"]}')
+        print(f'CPF: {dados_cliente["CPF"]}')
+        print(f'RG: {dados_cliente["RG"]}')
         print(f'Data de Nascimento: {data_nascimento}')
-        print(f'Gênero: {localizar_dados["Gênero"]}')
+        print(f'Gênero: {dados_cliente["Gênero"]}')
         print(f'Renda: {renda}')
         print(f'E-mail: {email}')
         print(f'Celular: {celular}')
-        print(f'Rua: {localizar_dados["Rua"]}')
-        print(f'Número: {localizar_dados["Número"]}')
-        print(f'Bairro: {localizar_dados["Bairro"]}')
-        print(f'Cidade: {localizar_dados["Cidade"]}')
-        print(f'UF: {localizar_dados["UF"]}')
-        print(f'CEP: {localizar_dados["CEP"]}')
+        print(f'Rua: {dados_cliente["Rua"]}')
+        print(f'Número: {dados_cliente["Número"]}')
+        print(f'Bairro: {dados_cliente["Bairro"]}')
+        print(f'Cidade: {dados_cliente["Cidade"]}')
+        print(f'UF: {dados_cliente["UF"]}')
+        print(f'CEP: {dados_cliente["CEP"]}')
 
         time.sleep(15)
         os.system('cls')
@@ -468,23 +482,24 @@ class ContaCorrente:
                     time.sleep(5)
                     os.system('cls')
                     break
+                os.system('cls')
                 print('Localizando o beneficiário...')
                 time.sleep(5)
                 os.system('cls')
-                localizar_cliente_ = localizar_cliente(cpf_beneficiario)
-                if localizar_cliente_ != 'Cliente não encontrado':
+                dados_cliente = exibir_dados(cpf_beneficiario)
+                if dados_cliente != 'Cliente não encontrado':
                     agencia_beneficiario = input('Por favor, informe o número da agência: ').strip()
                     conta_beneficiario = input('Por favor, informe o número da conta: ').strip()
                     os.system('cls')
                     print('Localizando agência e conta do beneficiário...')
                     time.sleep(5)
                     os.system('cls')
-                    localizar_conta_ = localizar_conta(cpf_beneficiario)
-                    if agencia_beneficiario == localizar_conta_['Agência'] and conta_beneficiario == localizar_conta_['Conta']:
-                        valor = input(f'Quanto você gostaria de transferir para {localizar_cliente_["Nome_cliente"]}? ').strip()
+                    # dados_cliente = exibir_dados(cpf_beneficiario)
+                    if agencia_beneficiario == dados_cliente['Agência'] and conta_beneficiario == dados_cliente['Conta']:
+                        valor = input(f'Quanto você gostaria de transferir para {dados_cliente["Nome_cliente"]}? ').strip()
                         valor_transferencia = self._validar_valor(valor)
                         if valor_transferencia != 'valor inválido':
-                            if (localizar_conta_['Saldo'] + self._limite_cheque_especial()) >= valor_transferencia:
+                            if (dados_cliente['Saldo'] + self._limite_cheque_especial()) >= valor_transferencia:
                                 retorno_atualizar_transferencia = transferir(
                                                                         cpf=cpf_beneficiario, 
                                                                         valor=valor_transferencia, 
@@ -492,7 +507,7 @@ class ContaCorrente:
                                                                         tipo_operacao='beneficiario'
                                                                         )
                                 armanezar_transacao(
-                                                    id_cliente=localizar_cliente_['ID_Cliente'],
+                                                    id_cliente=dados_cliente['ID_Cliente'],
                                                     valor_transacao=valor_transferencia,
                                                     tipo_transacao="Transferência", 
                                                     protocolo_transacao=(protocolo_operacao:= self._criar_chave_hash(self._nome, self._cpf)),
@@ -504,7 +519,7 @@ class ContaCorrente:
                                                 valor=valor_transferencia, 
                                                 data_atualizacao=ContaCorrente._data_hora()
                                                 )
-                                        id_cliente_titular = self._localizar_cliente(self._cpf)
+                                        id_cliente_titular = localizar_cliente(self._cpf)
                                         armanezar_transacao(
                                                     id_cliente=id_cliente_titular['ID_Cliente'],
                                                     valor_transacao=-valor_transferencia,
