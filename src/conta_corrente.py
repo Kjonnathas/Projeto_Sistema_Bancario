@@ -8,8 +8,13 @@ from email_validator import validate_email
 import re
 import random
 import hashlib
+import logging
 from database_manager import localizar_cliente, localizar_conta, transferir, depositar, sacar, consultar_saldo_bancario, armanezar_transacao, exibir_dados
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 class ContaCorrente:
 
@@ -486,7 +491,7 @@ class ContaCorrente:
                 print('Localizando o beneficiário...')
                 time.sleep(5)
                 os.system('cls')
-                dados_cliente = exibir_dados(cpf_beneficiario)
+                dados_cliente = localizar_conta(cpf_beneficiario)
                 if dados_cliente != 'Cliente não encontrado':
                     agencia_beneficiario = input('Por favor, informe o número da agência: ').strip()
                     conta_beneficiario = input('Por favor, informe o número da conta: ').strip()
@@ -494,7 +499,6 @@ class ContaCorrente:
                     print('Localizando agência e conta do beneficiário...')
                     time.sleep(5)
                     os.system('cls')
-                    # dados_cliente = exibir_dados(cpf_beneficiario)
                     if agencia_beneficiario == dados_cliente['Agência'] and conta_beneficiario == dados_cliente['Conta']:
                         valor = input(f'Quanto você gostaria de transferir para {dados_cliente["Nome_cliente"]}? ').strip()
                         valor_transferencia = self._validar_valor(valor)
@@ -637,3 +641,7 @@ class ContaCorrente:
                                             print('A resposta informada é inválida. Por favor, digite novamente.')
                     else:
                         print('O valor informado é inválido. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
+
+if __name__ == '__main__':
+
+    logging.warning('Esse script não deve ser executado diretamente. Para utilizá-lo, execute o script "main.py"')

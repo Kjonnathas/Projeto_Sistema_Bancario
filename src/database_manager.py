@@ -4,6 +4,14 @@ from sqlalchemy.engine import Engine
 from datetime import datetime, date
 import os
 from dotenv import load_dotenv
+import logging
+
+
+# Defini o nível de logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv('.env')
@@ -178,6 +186,7 @@ def localizar_conta(cpf: str) -> dict:
     # Retorno da função
     return {
                 "ID_Cliente": conta.id_cliente,
+                "Nome_cliente": cliente.nome,
                 "Agência": conta.agencia, 
                 "Conta": conta.conta, 
                 "Saldo": conta.saldo
@@ -608,3 +617,8 @@ def exibir_dados(cpf: str) -> dict:
                 "UF": endereco.uf,
                 "CEP": endereco.cep
             }
+
+# Verifica se é o arquivo main que está sendo executado
+if __name__ == '__main__':
+
+    logging.warning('Esse script não deve ser executado diretamente. Para utilizá-lo, execute o script "main.py"')
