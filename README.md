@@ -1,3 +1,5 @@
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![POSTGRES](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+
 ## Objetivo do projeto
 
 O projeto está sendo desenvolvido com o objetivo de colocar em prática o conhecimento adquirido sobre POO (programação orientada à ojetos) e mais alguns outros conceitos.
@@ -39,7 +41,7 @@ SQL:
 - Postgres (servidor) e pgAdmin (interface gráfica de usuário)
 - Git 2.40.1 ou superior
 
-## Como utilizar o projeto
+## Instrução de uso
 
 1. Crie o banco de dados, o schema e as tabelas no SGBD (Postgres). Os códigos SQL estão na pasta src no arquivo "schema.sql". Execute na ordem que está no arquivo.
 
