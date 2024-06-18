@@ -11,19 +11,25 @@ import hashlib
 import logging
 from database_manager import localizar_cliente, localizar_conta, transferir, depositar, sacar, consultar_saldo_bancario, armanezar_transacao, exibir_dados
 
+
+# Defini o nível de logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
+
+# Criação da classe ContaCorrente
 class ContaCorrente:
 
+    # Criação de um método estático
     @staticmethod
     def _data_hora():
         fuso_br = pytz.timezone('Brazil/East')
         horario_br = datetime.now(fuso_br)
         return horario_br.strftime('%d/%m/%Y %H:%M:%S')
 
+    # Criação do método init
     def __init__(self):
         self._nome = self._validar_nome()
         self._sobrenome = self._validar_sobrenome()
@@ -44,6 +50,19 @@ class ContaCorrente:
             self._saldo = 0
 
     def _validar_nome(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um nome válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         while True:
             self._nome = input('Olá, seja bem-vindo ao J.P. Morgan. Poderia me informar o seu primeiro nome? ').strip()
             validar_nome = self._nome.replace(' ', '')
@@ -56,6 +75,18 @@ class ContaCorrente:
                 os.system('cls')
 
     def _validar_sobrenome(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um sobrenome válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         while True:
             self._sobrenome = input(f'{self._nome}, seu nome é muito bonito. Qual seria o seu sobrenome? ').strip()
             if self._sobrenome.isalpha():
@@ -67,6 +98,19 @@ class ContaCorrente:
                 os.system('cls')
 
     def _validar_cpf(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um CPF válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         while True:
             self._cpf = input(f'Obrigado, {self._nome.split()[0].title()}!\n\nEstou muito feliz de poder atendê-lo (a)!\n\nAgora, você poderia me informar o seu CPF (somente números)? ').strip()
             self._cpf = '{}.{}.{}-{}'.format(self._cpf[:3], self._cpf[3:6], self._cpf[6:9], self._cpf[9:])
@@ -88,6 +132,19 @@ class ContaCorrente:
                     os.system('cls')
 
     def _continuar_atendimento(self) -> str :
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo interagir com o cliente ou identificar se é um possível novo cliente. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         while True:
             self.resposta_atendimento = input(f'{self._nome.split()[0].title()}, eu reparei que você ainda não é nosso (a) cliente.\n\nAdoraríamos tê-lo (a) conosco. Gostaria de abrir uma conta corrente? (S/N) ').strip()
             os.system('cls')
@@ -107,6 +164,19 @@ class ContaCorrente:
                 return self.resposta_atendimento
 
     def _validar_rg(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um RG válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         while True:
             self._rg = input('Dando continuidade ao seu atendimento, digite o seu RG (apenas números): ').strip()
             if not self._rg:
@@ -124,6 +194,19 @@ class ContaCorrente:
                     os.system('cls')
 
     def _validar_data_nascimento(self) -> date:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se a data de nascimento é válida. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma data (date).
+        '''
+
         while True:
             self._data_nascimento = input('Digite a sua data de nascimento (DD/MM/AAAA): ').strip()
             if not self._data_nascimento:
@@ -146,6 +229,19 @@ class ContaCorrente:
                     os.system('cls')
 
     def _validar_genero(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um gênero válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         while True:
             self._genero = input('Digite o seu gênero (M/F): ').strip()
             if not self._genero:
@@ -162,6 +258,19 @@ class ContaCorrente:
                     os.system('cls')
 
     def _validar_email(self) -> str | None:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um e-mail válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str) ou nulo (None).
+        '''
+
         while True:
             self._email = input('Digite o seu e-mail: ').strip()
             if not self._email:
@@ -179,7 +288,20 @@ class ContaCorrente:
                     time.sleep(5)
                     os.system('cls')
 
-    def _validar_celular(self) -> str | None: 
+    def _validar_celular(self) -> str | None:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um celular válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str) ou nulo (None).
+        '''
+
         while True:
             self.telefone = input('Digite o seu número de telefone celular (somente números): ').strip()
             if not self.telefone:
@@ -199,6 +321,19 @@ class ContaCorrente:
                     os.system('cls')
 
     def _validar_profissao(self) -> str | None:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é uma profissão válida. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str) ou nulo (None).
+        '''
+
         while True:
             self._profissao = input('Digite a sua profissão: ').strip()
             if not self._profissao:
@@ -216,6 +351,19 @@ class ContaCorrente:
                     return self._profissao
 
     def _validar_valor(self, valor: str) -> float | str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se um valor é válido. \n
+        Parâmetros
+        ----------
+        A função precisa de um valor para funcionar. \n
+        Retorno
+        -------
+        O retorno da função é um valor numérico (float) ou uma string (str).
+        '''
+
         valor = valor.strip()
         regex_valor = re.compile(r'^\d+(\.\d{3})*(?:,\d{1,2})?$')
         if regex_valor.match(valor):
@@ -231,6 +379,19 @@ class ContaCorrente:
             return 'valor inválido'
 
     def _validar_renda(self) -> float | None:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é uma renda válida. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é um valor numérico (float) ou nulo (None).
+        '''
+
         while True:
             self._renda = input('Digite a sua renda atual (somente números): ').strip()
             if not self._renda.strip():
@@ -250,6 +411,19 @@ class ContaCorrente:
                     return self._renda
 
     def _validar_endereco(self) -> dict:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo validar se é um endereço válido. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é um dicionário (dict).
+        '''
+
         print(f'{self._nome.split()[0].title()}, estamos quase lá! Agora, só precisamos que nos informe o seu endereço para concluirmos o seu cadastro, ok?')
         time.sleep(10)
         os.system('cls')
@@ -311,14 +485,53 @@ class ContaCorrente:
                 print('Você não digitou o nome da sua rua. Por favor, digite novamente.')
 
     def _criar_agencia(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo gerar uma sequência de números randômicos para a criação de um número de agência. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         self._agencia = ''.join(str(random.randint(0, 9)) for _ in range(4))
         return self._agencia
 
     def _criar_conta(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo gerar uma sequência de números randômicos para a criação de um número de conta. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         self._conta = ''.join(str(random.randint(0, 9)) for _ in range(8)) + '-' + str(random.randint(0, 9))
         return self._conta
 
     def _inicializar_atendimento_cliente(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo gerar um menu de atendimento para o cliente. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         print('\n')
         print('Selecione uma das opções abaixo (digite somente o número correspondente a operação desejada): ')
         print('\n')
@@ -361,10 +574,23 @@ class ContaCorrente:
                     print('Opção digitada é inválida. Por favor, digite uma opção válida.')
 
     def _criar_chave_hash(self, nome_cliente, cpf) -> str:
-        mensagem = '{}_{}'.format(nome_cliente, cpf)
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo gerar uma sequência de números e letras de forma randômica para a criação de protocolos de operações. \n
+        Parâmetros
+        ----------
+        A função precisa de um nome e de um CPF para funcionar. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
+        chave = '{}_{}'.format(nome_cliente, cpf)
 
         obj_hash = hashlib.sha256()
-        obj_hash.update(mensagem.encode('utf-8'))
+        obj_hash.update(chave.encode('utf-8'))
 
         chave_hash = obj_hash.hexdigest()
         chave_hash = chave_hash[:100]
@@ -376,6 +602,19 @@ class ContaCorrente:
         return chave_hash
 
     def _limite_cheque_especial(self) -> float:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo calcular o limite de cheque especial disponível para um determinado cliente. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é um valor numérico (float).
+        '''
+
         dados_cliente = exibir_dados(self._cpf)
         if dados_cliente['Renda'] == None:
             self.limite_cheque_especial = 500
@@ -385,6 +624,19 @@ class ContaCorrente:
             return self.limite_cheque_especial
 
     def exibir_dados_pessoais(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo exibir para o cliente as informações pessoais dele. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         os.system('cls')
         dados_cliente = exibir_dados(self._cpf)
         data_nascimento = datetime.strftime(dados_cliente['Data_nascimento'], format='%d/%m/%Y')
@@ -426,6 +678,19 @@ class ContaCorrente:
                 os.system('cls')
 
     def consultar_saldo(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo exibir o saldo bancário do cliente. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         os.system('cls')
         self._saldo = consultar_saldo_bancario(self._cpf)
         self._saldo = float(self._saldo['Saldo'])
@@ -434,6 +699,19 @@ class ContaCorrente:
         os.system('cls')
 
     def depositar_dinheiro(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo depositar um determinado valor na conta do cliente. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
         while True:
             os.system('cls')
             valor_deposito = input('Quanto você gostaria de depositar? ').strip()
@@ -473,6 +751,19 @@ class ContaCorrente:
                         return self.consultar_saldo()
 
     def transferir_dinheiro(self) -> str | None:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo transferir um valor de uma conta para outra. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str) ou nulo (None).
+        '''
+
         while True:
             os.system('cls')
             cpf_beneficiario = input('Por favor, informe o CPF do beneficiário (somente números): ').strip()
@@ -579,6 +870,19 @@ class ContaCorrente:
                     os.system('cls')
 
     def sacar_dinheiro(self) -> str | None:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo sacar um determinado valor na conta do cliente. \n
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+        Retorno
+        -------
+        O retorno da função é uma string (str) ou nulo (None).
+        '''
+
         while True:
             os.system('cls')
             valor = input('Qual o valor você gostaria de sacar, por gentileza? ').strip()
@@ -642,6 +946,7 @@ class ContaCorrente:
                     else:
                         print('O valor informado é inválido. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
 
+# Verifica se é o arquivo main que está sendo executado
 if __name__ == '__main__':
 
     logging.warning('Esse script não deve ser executado diretamente. Para utilizá-lo, execute o script "main.py"')

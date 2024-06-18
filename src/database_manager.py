@@ -94,13 +94,13 @@ def conectar_db() -> Engine:
     '''
     Objetivo
     --------
-    A função conectar_db como o próprio nome sugere tem como objetivo realizar a conexão ao banco de dados. \n
+    A função como o próprio nome sugere tem como objetivo realizar a conexão ao banco de dados. \n
     Parâmetros
     ----------
-    A função conectar_db não precisa de parâmetros, pois os parâmetros necessários (usuário, senha, hostname e nome do banco de dados) já são incluídos dentro da própria função. \n
+    A função não precisa de parâmetros, pois os parâmetros necessários (usuário, senha, hostname e nome do banco de dados) já são incluídos dentro da própria função. \n
     Retorno
     -------
-    O retorno da função conectar_db é a engine de conexão ao banco de dados, que servirá posteriormente para interação de outras ações como "INSERT", "UPDATE" e "DELETE".
+    O retorno da função é a engine de conexão ao banco de dados, que servirá posteriormente para interação de outras ações como "INSERT", "UPDATE" e "DELETE".
     '''
 
     # Carrega as variáveis de ambiente do arquivo .env
@@ -128,13 +128,13 @@ def localizar_cliente(cpf: str) -> dict | str:
     '''
     Objetivo
     --------
-    A função localizar_cliente tem como objetivo localizar um determinado cliente no banco de dados. \n
+    A função tem como objetivo localizar um determinado cliente no banco de dados. \n
     Parâmetros
     ----------
-    A função localizar_cliente espera receber um CPF/CNPJ para funcionar. \n
+    A função espera receber um CPF/CNPJ para funcionar. \n
     Retorno
     -------
-    O retorno da função localizar_cliente é um `dicionário` com o ID_Cliente quando o mesmo existe ou uma `string` com a informação de "Cliente não encontrado".
+    O retorno da função é um `dicionário` com o ID_Cliente quando o mesmo existe ou uma `string` com a informação de "Cliente não encontrado".
     '''
 
     # Conecta ao banco de dados
@@ -158,13 +158,13 @@ def localizar_conta(cpf: str) -> dict:
     '''
     Objetivo
     --------
-    A função localizar_conta tem como objetivo localizar a conta corrente de um determinado cliente no banco de dados. \n
+    A função tem como objetivo localizar a conta corrente de um determinado cliente no banco de dados. \n
     Parâmetros
     ----------
-    A função localizar_conta espera receber um CPF/CNPJ para funcionar. \n
+    A função espera receber um CPF/CNPJ para funcionar. \n
     Retorno
     -------
-    O retorno da função localizar_conta é um `dicionário` com o ID_Cliente, Agência, Conta e Saldo.
+    O retorno da função é um `dicionário` com o ID_Cliente, Agência, Conta e Saldo.
     '''
 
     # Conecta ao banco de dados
@@ -218,13 +218,13 @@ def cadastrar_cliente(
     '''
     Objetivo
     --------
-    A função cadastrar_cliente como o próprio nome sugere tem como objetivo cadastrar os dados de um determinado cliente no banco de dados. \n
+    A função como o próprio nome sugere tem como objetivo cadastrar os dados de um determinado cliente no banco de dados. \n
     Parâmetros
     ----------
-    A função cadastrar_cliente espera receber nome_cliente, genero, cpf, rg, data_nascimento, email, celular, renda, agencia, conta, saldo, rua, numero, bairro, cidade, uf, cep e data_atualizacao. Porém, os parâmetros obrigatórios são apenas o nome_cliente, genero, cpf, rg, data_nascimento, agencia, conta, saldo, rua, numero, bairro, cidade, uf, cep e data_atualizacao. \n
+    A função espera receber nome_cliente, genero, cpf, rg, data_nascimento, email, celular, renda, agencia, conta, saldo, rua, numero, bairro, cidade, uf, cep e data_atualizacao. Porém, os parâmetros obrigatórios são apenas o nome_cliente, genero, cpf, rg, data_nascimento, agencia, conta, saldo, rua, numero, bairro, cidade, uf, cep e data_atualizacao. \n
     Retorno
     -------
-    O retorno da função cadastrar_cliente é uma string "Conta cadastrada com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o cadastramento.
+    O retorno da função é uma string "Conta cadastrada com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o cadastramento.
     '''
 
     # Bloco try-except para tratamento de exceção
@@ -307,13 +307,13 @@ def sacar(cpf: str, valor: float, data_atualizacao: datetime) -> str:
     '''
     Objetivo
     --------
-    A função sacar tem como objetivo realizar a operação de saque na conta do cliente. \n
+    A função tem como objetivo realizar a operação de saque na conta do cliente. \n
     Parâmetros
     ----------
-    A função sacar espera receber um CPF/CNPJ, um valor e uma data de atualização para funcionar. \n
+    A função espera receber um CPF/CNPJ, um valor e uma data de atualização para funcionar. \n
     Retorno
     -------
-    O retorno da função sacar é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
+    O retorno da função é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
     '''
 
     # Bloco try-except para tratamento de exceção
@@ -357,13 +357,13 @@ def consultar_saldo_bancario(cpf: str) -> str:
     '''
     Objetivo
     --------
-    A função consultar_saldo_bancario tem como objetivo realizar a operação de consultar o saldo atual na conta bancária do cliente. \n
+    A função tem como objetivo realizar a operação de consultar o saldo atual na conta bancária do cliente. \n
     Parâmetros
     ----------
-    A função sacar espera receber um CPF/CNPJ para funcionar. \n
+    A função espera receber um CPF/CNPJ para funcionar. \n
     Retorno
     -------
-    O retorno da função sacar é uma string com o saldo bancário em caso de sucesso ou uma exceção em caso de erro durante o processamento.
+    O retorno da função é uma string com o saldo bancário em caso de sucesso ou uma exceção em caso de erro durante o processamento.
     '''
 
     # Bloco try-except para tratamento de exceção
@@ -398,13 +398,13 @@ def depositar(cpf: str, valor: float, data_atualizacao: datetime) -> str:
     '''
     Objetivo
     --------
-    A função depositar tem como objetivo realizar a operação de depositar um valor na conta bancária do cliente. \n
+    A função tem como objetivo realizar a operação de depositar um valor na conta bancária do cliente. \n
     Parâmetros
     ----------
-    A função depositar espera receber um CPF/CNPJ, um valor e uma data de atualização para funcionar. \n
+    A função espera receber um CPF/CNPJ, um valor e uma data de atualização para funcionar. \n
     Retorno
     -------
-    O retorno da função depositar é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
+    O retorno da função é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
     '''
 
     # Bloco try-except para tratamento de exceção
@@ -453,13 +453,13 @@ def transferir(
     '''
     Objetivo
     --------
-    A função transferir tem como objetivo realizar a operação de transferir um valor na conta bancária de um cliente para outro. \n
+    A função tem como objetivo realizar a operação de transferir um valor na conta bancária de um cliente para outro. \n
     Parâmetros
     ----------
-    A função transferir espera receber um CPF/CNPJ, um valor, uma data de atualização e o tipo de operação. \n
+    A função espera receber um CPF/CNPJ, um valor, uma data de atualização e o tipo de operação. \n
     Retorno
     -------
-    O retorno da função transferir é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
+    O retorno da função é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
     '''
 
     # Bloco try-except para tratamento de exceção
@@ -518,13 +518,13 @@ def armanezar_transacao(
     '''
     Objetivo
     --------
-    A função armazenar_transacao tem como objetivo armazenar todas as transações que ocorrerem nas operações bancárias. \n
+    A função tem como objetivo armazenar todas as transações que ocorrerem nas operações bancárias. \n
     Parâmetros
     ----------
-    A função armazenar_transacao espera receber um id_cliente, valor de transação, tipo de transação, o protocolo da transação e uma data de atualização para funcionar. \n
+    A função espera receber um id_cliente, valor de transação, tipo de transação, o protocolo da transação e uma data de atualização para funcionar. \n
     Retorno
     -------
-    O retorno da função armazenar_transacao é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
+    O retorno da função é uma string "Operação concluída com sucesso!" em caso de sucesso ou uma exceção em caso de erro durante o processamento.
     '''
 
     # Bloco try-except para tratamento de exceção
@@ -568,13 +568,13 @@ def exibir_dados(cpf: str) -> dict:
     '''
     Objetivo
     --------
-    A função exibir_dados tem como objetivo exibir os dados do cliente. \n
+    A função tem como objetivo exibir os dados do cliente. \n
     Parâmetros
     ----------
-    A função exibir_dados espera receber CPF/CNPJ para funcionar. \n
+    A função espera receber CPF/CNPJ para funcionar. \n
     Retorno
     -------
-    O retorno da função exibir_dados é um dicionário com as informações de id_cliente, nome, gênero, cpf, rg, data de nascimento, agência, conta, email, celular, renda, rua, numero, bairro, cidade, uf e cep.
+    O retorno da função é um dicionário com as informações de id_cliente, nome, gênero, cpf, rg, data de nascimento, agência, conta, email, celular, renda, rua, numero, bairro, cidade, uf e cep.
     '''
 
     # Cria a conexão com o banco de dados
