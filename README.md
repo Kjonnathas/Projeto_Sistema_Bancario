@@ -8,6 +8,8 @@ O projeto foi estruturado para receber dados de uma aplicação - inicialmente v
 
 ![DER](DER.png)
 
+![DER](arquitetura_aplicacao.png)
+
 ## Tecnologias utilizadas
 
 Python:
