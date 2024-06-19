@@ -55,9 +55,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um nome válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+        
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -922,7 +924,7 @@ class ContaCorrente:
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
-        
+
         Retorno
         -------
         O retorno da função é uma string (str) ou nulo (None).
