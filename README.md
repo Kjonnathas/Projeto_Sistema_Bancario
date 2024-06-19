@@ -14,7 +14,7 @@ O projeto foi estruturado para receber dados de uma aplicação - inicialmente v
 
 <br>
 
-Python: ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 - sqlalchemy -> gerenciamento/interação com o banco de dados;
 - datetime -> manipulação de datas;
@@ -60,7 +60,9 @@ python -m venv venv
 3. Ative o ambiente virtual:
 
 ```
-venv\Scripts\activate
+CMD -> venv/Scripts/activate
+
+PowerShell -> venv/Scripts/Activate.ps1
 ```
 
 <br>
