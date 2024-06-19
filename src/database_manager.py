@@ -95,9 +95,11 @@ def conectar_db() -> Engine:
     Objetivo
     --------
     A função como o próprio nome sugere tem como objetivo realizar a conexão ao banco de dados. \n
+
     Parâmetros
     ----------
     A função não precisa de parâmetros, pois os parâmetros necessários (usuário, senha, hostname e nome do banco de dados) já são incluídos dentro da própria função. \n
+
     Retorno
     -------
     O retorno da função é a engine de conexão ao banco de dados, que servirá posteriormente para interação de outras ações como "INSERT", "UPDATE" e "DELETE".
@@ -105,20 +107,14 @@ def conectar_db() -> Engine:
 
     # Carrega as variáveis de ambiente do arquivo .env
 
-    # POSTGRES_USER = os.getenv('POSTGRES_USER')
-    # POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
-    # POSTGRES_HOST = os.getenv('POSTGRES_HOST')
-    # POSTGRES_PORT = os.getenv('POSTGRES_PORT')
-    # POSTGRES_DB = os.getenv('POSTGRES_DB')
-
-    POSTGRES_USER = 'postgres'
-    POSTGRES_PASSWORD = 'postgre527961'
-    POSTGRES_HOST = 'localhost'
-    POSTGRES_PORT = '5432'
-    POSTGRES_DB = 'db_transacional'
+    POSTGRES_USER = os.getenv('POSTGRES_USER')
+    POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+    POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+    POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+    POSTGRES_DB = os.getenv('POSTGRES_DB')
 
     connection = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
-    # global engine
+
     engine = create_engine(connection)
 
     return engine
@@ -589,7 +585,7 @@ def exibir_dados(cpf: str) -> dict:
     Parâmetros
     ----------
     A função espera receber CPF/CNPJ para funcionar. \n
-    
+
     Retorno
     -------
     O retorno da função é um dicionário com as informações de id_cliente, nome, gênero, cpf, rg, data de nascimento, agência, conta, email, celular, renda, rua, numero, bairro, cidade, uf e cep.
