@@ -4,7 +4,8 @@ from database_manager import cadastrar_cliente
 conta = ContaCorrente()
 
 cadastrar_cliente(
-    nome_cliente=conta._nome,
+    nome=conta._nome,
+    sobrenome=conta._sobrenome,
     genero=conta._genero,
     cpf=conta._cpf,
     rg=conta._rg,

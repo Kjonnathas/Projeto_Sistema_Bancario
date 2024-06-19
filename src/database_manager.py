@@ -107,11 +107,17 @@ def conectar_db() -> Engine:
 
     # Carrega as variáveis de ambiente do arquivo .env
 
-    POSTGRES_USER = os.getenv('POSTGRES_USER')
-    POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
-    POSTGRES_HOST = os.getenv('POSTGRES_HOST')
-    POSTGRES_PORT = os.getenv('POSTGRES_PORT')
-    POSTGRES_DB = os.getenv('POSTGRES_DB')
+    # POSTGRES_USER = os.getenv('POSTGRES_USER')
+    # POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+    # POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+    # POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+    # POSTGRES_DB = os.getenv('POSTGRES_DB')
+
+    POSTGRES_USER = 'postgres'
+    POSTGRES_PASSWORD = 'postgre527961'
+    POSTGRES_HOST = 'localhost'
+    POSTGRES_PORT = '5432'
+    POSTGRES_DB = 'db_transacional'
 
     connection = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
 
@@ -193,7 +199,8 @@ def localizar_conta(cpf: str) -> dict:
             }
 
 def cadastrar_cliente(
-        nome_cliente: str, 
+        nome: str,
+        sobrenome: str,
         genero: str, 
         cpf: str, 
         rg: str, 
@@ -241,7 +248,8 @@ def cadastrar_cliente(
 
         # Cria uma nova instância da tabela de clientes mapeando os atributos correspondentes aos campos na tabela 
         criar_cliente = Tb_cliente(
-                nome_cliente = nome_cliente,
+                nome = nome,
+                sobrenome = sobrenome,
                 genero = genero,
                 cpf = cpf,
                 rg = rg,
@@ -613,7 +621,8 @@ def exibir_dados(cpf: str) -> dict:
     # Retorno da função
     return {
                 "ID_Cliente": cliente.id_cliente,
-                "Nome_cliente": cliente.nome_cliente,
+                "Nome_cliente": cliente.nome,
+                "Sobrenome_cliente": cliente.sobrenome,
                 "Gênero": cliente.genero,
                 "CPF": cliente.cpf, 
                 "RG": cliente.rg,

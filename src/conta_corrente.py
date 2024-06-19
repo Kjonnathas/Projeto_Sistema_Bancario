@@ -32,11 +32,11 @@ class ContaCorrente:
     # Criação do método init
     def __init__(self):
         self._nome = self._validar_nome()
-        self._sobrenome = self._validar_sobrenome()
         self._cpf = self._validar_cpf()
         if self.resposta_atendimento is None or self.resposta_atendimento == 'N':
             sys.exit()
         else:
+            self._sobrenome = self._validar_sobrenome()
             self._rg = self._validar_rg()
             self._data_nascimento = self._validar_data_nascimento()
             self._genero = self._validar_genero()
@@ -59,16 +59,15 @@ class ContaCorrente:
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
-        
+
         Retorno
         -------
         O retorno da função é uma string (str).
         '''
 
         while True:
-            self._nome = input('Olá, seja bem-vindo ao J.P. Morgan. Poderia me informar o seu primeiro nome? ').strip()
-            validar_nome = self._nome.replace(' ', '')
-            if validar_nome.isalpha():
+            self._nome = input('Olá, seja bem-vindo ao Python Bank. Poderia me informar o seu primeiro nome? ').strip()
+            if self._nome.replace(' ', '').isalpha():
                 os.system('cls')
                 return self._nome.title()
             else:
@@ -94,9 +93,9 @@ class ContaCorrente:
 
         while True:
             self._sobrenome = input(f'{self._nome}, seu nome é muito bonito. Qual seria o seu sobrenome? ').strip()
-            if self._sobrenome.isalpha():
+            if self._sobrenome.replace(' ', '').isalpha():
                 os.system('cls')
-                return self._nome.title()
+                return self._sobrenome.title()
             else:
                 print('O sobrenome digitado é inválido. Por favor, digite novamente.')
                 time.sleep(5)
@@ -363,7 +362,7 @@ class ContaCorrente:
                 os.system('cls')
                 return None
             else:
-                if len(self._profissao) < 4 or not self._profissao.isalpha():
+                if len(self._profissao) < 4 or not self._profissao.replace(' ', '').isalpha():
                     print('A profissão informada é inválida. Por favor, digite novamente.')
                     time.sleep(5)
                     os.system('cls')
@@ -481,7 +480,7 @@ class ContaCorrente:
                                                         if cep:
                                                             regex_cep = re.compile(r'\d{8}')
                                                             if regex_cep.fullmatch(cep):
-                                                                print(f'{self._nome.split()[0].title()}, parecia que não ia ter fim né? Mas conseguimos finalizar o seu cadastro hahahaha.\n\nSeja muito bem-vindo ao J.P. Morgan.\n\nAgora você pode desfrutar de todo o ecossistema que o nosso banco oferece, além de todo suporte que precisar!\n\nConte conosco!')
+                                                                print(f'{self._nome.split()[0].title()}, parecia que não ia ter fim né? Mas conseguimos finalizar o seu cadastro hahahaha.\n\nSeja muito bem-vindo ao Python Bank.\n\nAgora você pode desfrutar de todo o ecossistema que o nosso banco oferece, além de todo suporte que precisar!\n\nConte conosco!')
                                                                 time.sleep(10)
                                                                 os.system('cls')
                                                                 cep = '{}-{}'.format(cep[:5], cep[5:])
@@ -660,6 +659,39 @@ class ContaCorrente:
             self.limite_cheque_especial = dados_cliente['Renda'] * 3
             return self.limite_cheque_especial
 
+    def retornar_menu_atendimento(self) -> str:
+
+        '''
+        Objetivo
+        --------
+        A função tem como objetivo retornar ao menu de atendimento. \n
+
+        Parâmetros
+        ----------
+        A função não precisa de parâmetros. \n
+
+        Retorno
+        -------
+        O retorno da função é uma string (str).
+        '''
+
+        retorno = None
+        while retorno != 'S' and retorno != 'N':
+            retorno = input('Você gostaria de realizar alguma outra operação? (S/N) ').strip()
+            if retorno == 'N':
+                os.system('cls')
+                print(f'Sendo assim, vamos encerrar o seu atendimento, {self._nome.split()[0].title()}.\n\nObrigado e volte sempre!')
+                time.sleep(5)
+                os.system('cls')
+                break
+            elif retorno == 'S':
+                os.system('cls')
+                return self._inicializar_atendimento_cliente()
+            else:
+                print('A resposta informada é inválida. Por favor, digite novamente.')
+                time.sleep(5)
+                os.system('cls')
+
     def exibir_dados_pessoais(self) -> str:
 
         '''
@@ -700,21 +732,7 @@ class ContaCorrente:
 
         time.sleep(15)
         os.system('cls')
-        retorno = None
-        while retorno != 'S' and retorno != 'N':
-            retorno = input('Você gostaria de realizar alguma outra operação? (S/N) ').strip()
-            if retorno == 'N':
-                os.system('cls')
-                print(f'Sendo assim, vamos encerrar o seu atendimento, {self._nome.split()[0].title()}.\n\nObrigado e volte sempre!')
-                time.sleep(5)
-                os.system('cls')
-                break
-            elif retorno == 'S':
-                return self._inicializar_atendimento_cliente()
-            else:
-                print('A resposta informada é inválida. Por favor, digite novamente.')
-                time.sleep(5)
-                os.system('cls')
+        return self.retornar_menu_atendimento()
 
     def consultar_saldo(self) -> str:
 
@@ -738,6 +756,7 @@ class ContaCorrente:
         print('O saldo da sua conta bancária é de R$ {:,.2f}'.format(self._saldo).replace('.', '_').replace(',', '.').replace('_', ','))
         time.sleep(5)
         os.system('cls')
+        return self.retornar_menu_atendimento()
 
     def depositar_dinheiro(self) -> str:
 
@@ -788,6 +807,7 @@ class ContaCorrente:
                             protocolo_transacao=(protocolo_operacao:= self._criar_chave_hash(self._nome, self._cpf)),
                             data_atualizacao=ContaCorrente._data_hora()
                         )
+                        os.system('cls')
                         print(f'Depósito realizado com sucesso!\n\nO protocolo da operação é: {protocolo_operacao}')
                         time.sleep(5)
                         os.system('cls')
@@ -876,31 +896,12 @@ class ContaCorrente:
                                     print('Não foi possível concluir a transferência.')
                                     time.sleep(5)
                                     os.system('cls')
-                                    break
+                                    return self.retornar_menu_atendimento()
                             else:
                                 print('O valor informado não pode ser transferido por falta de saldo na conta.')
                                 time.sleep(5)
                                 os.system('cls')
-                                self.consultar_saldo()
-                                while retorno != 'N' and retorno != 'S':
-                                    os.system('cls')
-                                    retorno = input('Você gostaria de transferir outro valor? (S/N): ').strip()
-                                    if retorno == 'N':
-                                        os.system('cls')
-                                        while novo_retorno != 'N' and novo_retorno != 'S':
-                                            os.system('cls')
-                                            novo_retorno = input(f'Entendemos, {self._nome.split()[0].title()}. Você gostaria de realizar alguma outra operação? (S/N) ').strip()
-                                            if novo_retorno == 'N':
-                                                os.system('cls')
-                                                print(f'Sendo assim, vamos encerrar o seu atendimento, {self._nome.split()[0].title()}.\n\n Obrigado e volte sempre!')
-                                                time.sleep(5)
-                                                os.system('cls')
-                                                return None
-                                            elif novo_retorno == 'S':
-                                                return self._inicializar_atendimento_cliente()
-                                            else:
-                                                print('A resposta informada é inválida. Por favor, digite novamente.')
-                                
+                                return self.consultar_saldo()
                         else:
                             print('O valor informado é inválido. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
                             time.sleep(5)
@@ -969,27 +970,7 @@ class ContaCorrente:
                             print('O valor informado não pode ser sacado por falta de saldo na conta.')
                             time.sleep(5)
                             os.system('cls')
-                            self.consultar_saldo()
-                            retorno = None
-                            while retorno != 'N' and retorno != 'S':
-                                os.system('cls')
-                                retorno = input('Você gostaria de sacar outro valor? (S/N): ').strip()
-                                if retorno == 'N':
-                                    os.system('cls')
-                                    novo_retorno = None
-                                    while novo_retorno != 'N' and novo_retorno != 'S':
-                                        os.system('cls')
-                                        novo_retorno = input(f'Entendemos, {self._nome.split()[0].title()}. Você gostaria de realizar alguma outra operação? (S/N) ').strip()
-                                        if novo_retorno == 'N':
-                                            os.system('cls')
-                                            print(f'Sendo assim, vamos encerrar o seu atendimento, {self._nome.split()[0].title()}.\n\nObrigado e volte sempre!')
-                                            time.sleep(5)
-                                            os.system('cls')
-                                            return None
-                                        elif novo_retorno == 'S':
-                                            return self._inicializar_atendimento_cliente()
-                                        else:
-                                            print('A resposta informada é inválida. Por favor, digite novamente.')
+                            return self.consultar_saldo()
                     else:
                         print('O valor informado é inválido. Por favor, digite novamente. Caso queira cancelar a operação digite "Cancelar".')
 
