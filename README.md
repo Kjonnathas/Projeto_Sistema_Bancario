@@ -1,6 +1,6 @@
 ## Objetivo do projeto
 
-O projeto está sendo desenvolvido com o objetivo de colocar em prática o conhecimento adquirido sobre POO (programação orientada à ojetos) e mais alguns outros conceitos.
+O projeto está sendo desenvolvido com o objetivo de colocar em prática o conhecimento adquirido sobre POO (programação orientada à objetos) e mais alguns outros conceitos.
 
 ## Estrutura do projeto
 
