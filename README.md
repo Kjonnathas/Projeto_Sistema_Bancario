@@ -43,9 +43,11 @@ O projeto foi estruturado para receber dados de uma aplicação - inicialmente v
 - Postgres (servidor) e pgAdmin (interface gráfica de usuário)
 - Git 2.40.1 ou superior
 
-## Instrução de uso
+## Instruções de uso
 
 1. Crie o banco de dados, o schema e as tabelas no SGBD (Postgres). Os códigos SQL estão na pasta src no arquivo "schema.sql". Execute na ordem que está no arquivo.
+
+2. Crie um arquivo ".env" e inclua as variáveis de ambiente POSTGRES_USER=seu_usuario, POSTGRES_PASSWORD=sua_senha, POSTGRES_HOST=localhost, POSTGRES_PORT=5432 e POSTGRES_DB=nome_do_seu_banco_de_dados. Sem essas variáveis de ambiente não será possível conectar no banco de dados.
 
 <br>
 
