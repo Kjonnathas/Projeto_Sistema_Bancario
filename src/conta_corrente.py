@@ -80,9 +80,12 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um sobrenome válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
+        Retorno
         -------
         O retorno da função é uma string (str).
         '''
@@ -103,9 +106,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um CPF válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -137,9 +142,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo interagir com o cliente ou identificar se é um possível novo cliente. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -169,9 +176,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um RG válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -199,9 +208,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se a data de nascimento é válida. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma data (date).
@@ -234,9 +245,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um gênero válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -263,9 +276,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um e-mail válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str) ou nulo (None).
@@ -294,9 +309,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um celular válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str) ou nulo (None).
@@ -326,9 +343,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é uma profissão válida. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str) ou nulo (None).
@@ -356,9 +375,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se um valor é válido. \n
+
         Parâmetros
         ----------
         A função precisa de um valor para funcionar. \n
+
         Retorno
         -------
         O retorno da função é um valor numérico (float) ou uma string (str).
@@ -384,9 +405,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é uma renda válida. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é um valor numérico (float) ou nulo (None).
@@ -416,9 +439,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo validar se é um endereço válido. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é um dicionário (dict).
@@ -490,9 +515,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo gerar uma sequência de números randômicos para a criação de um número de agência. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -507,9 +534,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo gerar uma sequência de números randômicos para a criação de um número de conta. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -524,9 +553,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo gerar um menu de atendimento para o cliente. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -579,9 +610,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo gerar uma sequência de números e letras de forma randômica para a criação de protocolos de operações. \n
+
         Parâmetros
         ----------
         A função precisa de um nome e de um CPF para funcionar. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -607,9 +640,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo calcular o limite de cheque especial disponível para um determinado cliente. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é um valor numérico (float).
@@ -629,9 +664,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo exibir para o cliente as informações pessoais dele. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -683,9 +720,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo exibir o saldo bancário do cliente. \n
+        
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -704,9 +743,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo depositar um determinado valor na conta do cliente. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str).
@@ -756,9 +797,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo transferir um valor de uma conta para outra. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+
         Retorno
         -------
         O retorno da função é uma string (str) ou nulo (None).
@@ -875,9 +918,11 @@ class ContaCorrente:
         Objetivo
         --------
         A função tem como objetivo sacar um determinado valor na conta do cliente. \n
+
         Parâmetros
         ----------
         A função não precisa de parâmetros. \n
+        
         Retorno
         -------
         O retorno da função é uma string (str) ou nulo (None).
