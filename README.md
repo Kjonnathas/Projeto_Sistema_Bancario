@@ -1,5 +1,3 @@
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![POSTGRES](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-
 ## Objetivo do projeto
 
 O projeto está sendo desenvolvido com o objetivo de colocar em prática o conhecimento adquirido sobre POO (programação orientada à ojetos) e mais alguns outros conceitos.
@@ -14,7 +12,9 @@ O projeto foi estruturado para receber dados de uma aplicação - inicialmente v
 
 ## Tecnologias utilizadas
 
-Python:
+<br>
+
+Python: ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 - sqlalchemy -> gerenciamento/interação com o banco de dados;
 - datetime -> manipulação de datas;
@@ -29,7 +29,9 @@ Python:
 - dotenv -> manipulação de variáveis de ambiente;
 - psycopg2 -> conexão com o postgres.
 
-SQL:
+<br>
+
+![POSTGRES](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
 - create database -> cria o banco de dados;
 - create schema -> cria o schema o banco de dados;
